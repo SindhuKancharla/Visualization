@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Loans Visualization</title>
+ 
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+   <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <script src="./static/lib/js/jquery.min.js"></script>
+    <script src="./static/lib/js/bootstrap.min.js"></script>
+    <script src="./static/lib/js/crossfilter.js"></script>
+    <script src="./static/lib/js/d3.js"></script>
+    <script src="./static/lib/js/dc.js"></script>
+    <script src="./static/lib/js/queue.js"></script>
+
+    <link rel="stylesheet" href="./static/css/mystyles.css">
+    <script type='text/javascript' src='./static/js/graphs.js'></script>
+    <script type='text/javascript' src='./static/js/elbow_kmeans.js'></script>
+    <script type='text/javascript' src="./static/lib/js/d3.layout.cloud.js"></script>
+  <style type="text/css">
+
+    
+    .axis{
+      font: 14px sans-serif;
+    }
+    .axis path, .axis line{
+      fill:none;
+      stroke:#000;
+      shape-rendering: crispEdges;
+    }
+  </style>
+</head>
+<body>
+
+<!-- <div id="sampling">
+<input type="radio" name="Sampling" value="Random">Random Sampling</input>
+<input type="radio" name="Sampling" value="Adaptive">Adaptive Sampling</input>
+</div> -->
+
+  
+  <div class="col-md-12">
+        
+          <label class="radio-inline">
+            <input type="radio" name="optradio" id="data">Data Visualization
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" id="text">Text Visualization
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="optradio" id="elbow" >Elbow Method
+          </label>
+        
+    </div>  
+    </br>
+</br>
+
+<div id = "elbowdiv" style="display:none"> 
+    <div class="col-md-12">
+        </br></br>
+        <button type="button" class="btn btn-info" id="ek" value=0>KMeans Elbow</button>
+        <button type="button" class="btn btn-info" id="ee" value=1>Eigen Values Elbow</button>
+        
+    </div> 
+    </br></br></br>
+
+</div>
+<div id = "textdiv" style="display:none"> 
+    <div class="col-md-12">
+        Select Type of Visualization: </br></br>
+        <button type="button" class="btn btn-info" id="lsa" value="LSA">LSA</button>
+        <button type="button" class="btn btn-info" id="wc" value="wc">Word Cloud</button>
+        
+    </div> 
+    </br></br></br>
+
+</div>
+<div id = "datadiv" style="display:none"> 
+    <div class="col-md-12">
+        Select Type of Sampling: </br>
+        <button type="button" class="btn btn-warning" id="rs" value="Random">Random Sampling</button>
+        <button type="button" class="btn btn-warning" id="as" value="Adaptive">Adaptive Sampling</button>
+        
+    </div> 
+    </br></br></br>
+    </br>
+    <div class="col-md-12">
+        Select Type of Dimension Reduction:  </br>
+        <button type="button" class="btn btn-info" id="pca" value="PCA">PCA</button>
+        <button type="button" class="btn btn-info" id="mds" value="MDS">MDS</button>
+        <button type="button" class="btn btn-info" id="iso" value="ISOMAP">ISOMAP</button>
+
+    </div>  
+    </br>
+    </br>
+    <div class="col-md-12"  id="mds_type">
+        </br></br>
+        <button type="button" class="btn btn-info" style="display:none" id="euc" value="Euclidean">Euclidean</button>
+        <button type="button" class="btn btn-info" style="display:none" id="cos" value="Cosine">Cosine</button>
+        <button type="button" class="btn btn-info" style="display:none" id="cor" value="Correlation">Correlation</button>
+
+    </div>  
+  </br></br>
+</div>  
+
+<br>
+<br>
+<svg class="chart"></svg>
+ 
+<script>
+
+$("#elbow").click(function(){
+
+
+    d3.select("svg").remove();
+    d3.select(".chart").remove();
+    $("#datadiv").hide();
+    $("#elbowdiv").show();
+    $("#textdiv").hide();
+
+});
+
+$("#text").click(function(){
+    d3.select("svg").remove();
+    d3.select(".chart").remove() 
+    $("#datadiv").hide();
+    $("#textdiv").show();
+    $("#elbowdiv").hide();
+});
+
+$("#ek").click(function(){
+
+    $("#datadiv").hide();
+    $("#textdiv").hide();
+    d3.select("svg").remove();
+    d3.select(".chart").remove() 
+    val = $(this).val();
+    hist(val);
+    
+});
+
+$("#ee").click(function(){
+    d3.select("svg").remove();
+    d3.select(".chart").remove() 
+    $("#datadiv").hide();
+    $("#textdiv").hide();
+    val = $(this).val();
+    hist(val);
+});
+
+$("#data").click(function(){
+    d3.select("svg").remove();
+    d3.select(".chart").remove() 
+    $("#elbowdiv").hide();
+    $("#datadiv").show();
+    $("#textdiv").hide();
+});
+
+$("#lsa").click(function(){
+    textviz();
+
+});
+
+$("#wc").click(function(){
+    wordcloud();
+});
+
+var str1 = "", str2="", str3="";
+
+$("#rs").click(function(){
+
+    $("#euc").hide();
+    $("#cos").hide();
+    $("#cor").hide();
+    $(this).addClass('active');
+    $(this).siblings().removeClass('active');
+    $().button('toggle')
+    str1 = $(this).val();
+    console.log(str1);
+
+});
+
+$("#as").click(function(){
+
+    $("#euc").hide();
+    $("#cos").hide();
+    $("#cor").hide();
+
+    $(this).addClass('active');
+    $(this).siblings().removeClass('active');
+
+    str1 = $(this).val();
+    console.log(str1);
+
+});
+
+$("#pca").click(function(){
+
+    $("#euc").hide();
+    $("#cos").hide();
+    $("#cor").hide();
+
+    str2 = $(this).val();
+    console.log(str2);
+    plotloandata(str1,str2,str3);
+
+});
+$("#mds").click(function(){
+
+
+    str2 = $(this).val();
+    console.log(str2);
+    $("#euc").show();
+    $("#cos").show();
+    $("#cor").show();
+
+    $("#euc")
+    .click(function(){
+
+        str3 = $(this).val();
+        
+    });
+    $("#cos")
+    .click(function(){
+
+        str3 = $(this).val();
+        
+    });
+    $("#cor")
+    .click(function(){
+
+        str3 = $(this).val();
+        
+    });
+
+    console.log(str3);
+
+    if(str3)
+      plotloandata(str1,str2,str3);
+
+    str3 = null;
+
+});
+
+$("#euc")
+    .click(function(){
+
+        str3 = $(this).val();
+        plotloandata(str1,str2,str3);
+    });
+    $("#cos")
+    .click(function(){
+
+        str3 = $(this).val();
+        plotloandata(str1,str2,str3);
+    });
+    $("#cor")
+    .click(function(){
+
+        str3 = $(this).val();
+        plotloandata(str1,str2,str3);
+    });
+
+
+$("#iso").click(function(){
+
+    $("#euc").hide();
+    $("#cos").hide();
+    $("#cor").hide();
+
+    str2 = $(this).val();
+    console.log(str2);
+    plotloandata(str1,str2,str3);
+});
+
+
+</script>
+ 
+</body>
+</html>

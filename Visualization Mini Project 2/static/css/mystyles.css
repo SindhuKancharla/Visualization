@@ -1,0 +1,91 @@
+.navbar-default {
+  background-color: #1a1a1a;
+}
+	
+#left {
+  border-right: 1px dashed #333;
+	height: 615px;
+	background-color: #00b0ef;
+	
+}
+#leftnav{
+	margin-top: 15px;
+}
+.navbar {
+  margin-bottom: 0px;
+}
+.addspace{
+	margin-top: 15px;
+}
+.text-info{
+	color: black;
+}
+.bar rect {
+	fill: teal;
+}
+
+a{
+	font-family: Helvetica;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
+	font-family: Helvetica;
+	font-size: 14px;
+	font-weight: bold;
+	color: #666;
+	background-color: #fff;
+}
+h3{
+	font-family: Lato;
+	font-size: 24px;
+	color: #00afef;
+}
+.form-horizontal .control-label {
+	text-align: left;
+}
+.col-sm-4 {
+  width: 21%;
+}
+
+.btn.clicked {
+    background: #f2f2f2;
+}
+
+#TOA{
+	height: 38px;
+	background-color: #ccffcc;
+	padding: 8px;
+}
+ #SA{
+	height: 50px;
+	background-color: #f2f2f2;
+	padding: 8px;
+} 
+input[type=radio] {
+		position: relative;
+		margin-left: 50px;
+		
+		cursor: pointer;
+		width: 16px;
+		height: 16px;
+		-webkit-border-radius: 8px;
+		-moz-border-radius: 8px;
+		border-radius: 8px;
+		background-color: #f0eff0;
+		font-family: Arial;
+		font-size: 14px;
+		color: #333;
+/* 		-webkit-box-shadow: 0 1px #fff, inset 0 1px rgba(102,102,102,.2), inset 0 0 1px rgba(0,0,0,.05);
+		-moz-box-shadow: 0 1px #fff, inset 0 1px rgba(102,102,102,.2), inset 0 0 1px rgba(0,0,0,.05);
+		box-shadow: 0 1px #fff, inset 0 1px rgba(102,102,102,.2), inset 0 0 1px rgba(0,0,0,.05); */
+}
+.axis{
+      font: 14px sans-serif;
+    }
+.axis path, .axis line{
+  fill:none;
+  stroke:#000;
+  shape-rendering: crispEdges;
+}
